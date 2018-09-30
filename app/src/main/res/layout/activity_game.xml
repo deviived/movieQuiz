@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context="com.example.deviived.moviequiz.controller.GameActivity">
+
+    <TextView
+        android:id="@+id/activity_game_question_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:textColor="@color/colorPrimaryLight"
+        android:layout_marginTop="0dp"
+        android:padding="5dp"
+        android:background="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:text="Question ?"></TextView>
+
+    <Button
+        android:id="@+id/activity_game_answer1_btn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:textColor="@android:color/background_light"
+        android:background="@color/colorPrimary"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:text="Answer1"/>
+
+    <Button
+        android:id="@+id/activity_game_answer2_btn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:textColor="@android:color/background_light"
+        android:background="@color/colorPrimary"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:text="Answer2"/>
+
+    <Button
+        android:id="@+id/activity_game_answer3_btn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:textColor="@android:color/background_light"
+        android:background="@color/colorPrimary"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:text="Answer3"/>
+
+    <Button
+        android:id="@+id/activity_game_answer4_btn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:textColor="@android:color/background_light"
+        android:background="@color/colorPrimary"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:text="Answer4"/>
+
+</LinearLayout>
