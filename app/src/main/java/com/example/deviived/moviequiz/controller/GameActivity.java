@@ -2,6 +2,7 @@ package com.example.deviived.moviequiz.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,14 +18,17 @@ import com.example.deviived.moviequiz.model.Question;
 import com.example.deviived.moviequiz.model.QuestionBank;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private TextView mTimer;
     private TextView mQuestion;
     private Button mAnswer1;
     private Button mAnswer2;
     private Button mAnswer3;
     private Button mAnswer4;
+    private Button mAnswers[];
 
     private QuestionBank mQuestionBank;
     private Question mCurrentQuestion;
@@ -36,7 +40,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
 
-    
+    CountDownTimer countDownTimer = null;
+
+    String timeS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +52,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mNumberOfQuestions = 10;
         mEnableTouchEvents = true;
 
+        mTimer = (TextView) findViewById(R.id.activity_timer_text);
         mQuestion = (TextView) findViewById(R.id.activity_game_question_text);
         mAnswer1 = (Button) findViewById(R.id.activity_game_answer1_btn);
         mAnswer2 = (Button) findViewById(R.id.activity_game_answer2_btn);
         mAnswer3 = (Button) findViewById(R.id.activity_game_answer3_btn);
         mAnswer4 = (Button) findViewById(R.id.activity_game_answer4_btn);
+        mAnswers = new Button[] {mAnswer1, mAnswer2, mAnswer3, mAnswer4};
 
         // Use the tag property to 'name' the buttons
         mAnswer1.setTag(0);
@@ -71,14 +79,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        countDownTimer.cancel();
+        mTimer.setText("");
         int responseIndex = (int) v.getTag();
 
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
             // Good answer
+            mAnswers[responseIndex].setBackgroundColor(getResources().getColor(R.color.ans_green));
             Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
             mScore++;
         } else {
             // Wrong answer
+            mAnswers[responseIndex].setBackgroundColor(getResources().getColor(R.color.ans_red));
             Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
         }
 
@@ -103,11 +115,56 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void displayQuestion(final Question question) {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
         mQuestion.setText(question.getQuestion());
         mAnswer1.setText(question.getChoiceList().get(0));
+        mAnswer1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mAnswer2.setText(question.getChoiceList().get(1));
+        mAnswer2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mAnswer3.setText(question.getChoiceList().get(2));
+        mAnswer3.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mAnswer4.setText(question.getChoiceList().get(3));
+        mAnswer4.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+        countDownTimer = new CountDownTimer(15000, 1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeS = Long.toString(millisUntilFinished / 1000);
+                mTimer.setText(timeS);
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(GameActivity.this ,"Time's up!", Toast.LENGTH_SHORT).show();
+
+                mEnableTouchEvents = false;
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEnableTouchEvents = true;
+
+                        // If this is the last question, ends the game.
+                        // Else, display the next question.
+                        if (--mNumberOfQuestions == 0) {
+                            // End the game
+                            endGame();
+                        } else {
+                            mCurrentQuestion = mQuestionBank.getQuestion();
+                            displayQuestion(mCurrentQuestion);
+                        }
+                    }
+                }, 1000); // LENGTH_SHORT is usually 2 second long
+
+            }
+
+
+        };
+        countDownTimer.start();
+
     }
 
     @Override
@@ -116,6 +173,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void endGame() {
+        countDownTimer.cancel();
+        mTimer.setText("");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Well done!")

@@ -9,6 +9,20 @@
     tools:context="com.example.deviived.moviequiz.controller.GameActivity">
 
     <TextView
+        android:id="@+id/activity_timer_text"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.4"
+        android:layout_height="0dp"
+        android:textColor="@color/colorPrimaryLight"
+        android:layout_marginTop="0dp"
+        android:padding="2dp"
+        android:background="@color/colorPrimaryDark"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="10"></TextView>
+
+    <TextView
         android:id="@+id/activity_game_question_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"

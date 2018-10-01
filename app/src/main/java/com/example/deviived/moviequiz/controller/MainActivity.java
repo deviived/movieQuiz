@@ -26,9 +26,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREF_KEY_FIRSTNAME = "PREF_KEY_FIRSTNAME";
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_txt);
         mNameInput = (EditText) findViewById(R.id.activity_main_name_input);

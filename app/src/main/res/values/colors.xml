@@ -11,4 +11,7 @@
 
     <color name="bg_darkred">#C51162</color>
 
+    <color name="ans_green">#43A047</color>
+    <color name="ans_red">#FF3D00</color>
+
 </resources>
