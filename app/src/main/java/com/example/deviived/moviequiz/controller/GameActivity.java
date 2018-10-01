@@ -2,6 +2,7 @@ package com.example.deviived.moviequiz.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -29,25 +30,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Button mAnswer3;
     private Button mAnswer4;
     private Button mAnswers[];
-
     private QuestionBank mQuestionBank;
     private Question mCurrentQuestion;
-
     private int mScore;
     private int mNumberOfQuestions;
-
-    private boolean mEnableTouchEvents;
-
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
 
     CountDownTimer countDownTimer = null;
+    public String timeS;
+    MediaPlayer good;
+    MediaPlayer wrong;
 
-    String timeS;
+    private boolean mEnableTouchEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         mQuestionBank = this.generateQuestions();
         mNumberOfQuestions = 10;
         mEnableTouchEvents = true;
@@ -85,10 +85,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
             // Good answer
+            good.start();
             mAnswers[responseIndex].setBackgroundColor(getResources().getColor(R.color.ans_green));
             Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
             mScore++;
         } else {
+            wrong.start();
             // Wrong answer
             mAnswers[responseIndex].setBackgroundColor(getResources().getColor(R.color.ans_red));
             Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
@@ -100,7 +102,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 mEnableTouchEvents = true;
-
                 // If this is the last question, ends the game.
                 // Else, display the next question.
                 if (--mNumberOfQuestions == 0) {
@@ -115,9 +116,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void displayQuestion(final Question question) {
+        good = MediaPlayer.create(GameActivity.this, R.raw.good);
+        wrong = MediaPlayer.create(GameActivity.this, R.raw.wrong);
+        good.setLooping(false);
+        wrong.setLooping(false);
+
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+
         mQuestion.setText(question.getQuestion());
         mAnswer1.setText(question.getChoiceList().get(0));
         mAnswer1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -139,7 +146,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFinish() {
                 Toast.makeText(GameActivity.this ,"Time's up!", Toast.LENGTH_SHORT).show();
-
+                wrong.start();
                 mEnableTouchEvents = false;
 
                 new Handler().postDelayed(new Runnable() {
@@ -191,8 +198,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 .create()
                 .show();
     }
-
-
 
     private QuestionBank generateQuestions() {
         Question question1 = new Question("Dans quel Matrix apparaît le personnage du Mérovingien ?",
@@ -299,6 +304,74 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 Arrays.asList("Seven", "Usual Suspects", "Le Silence des agneaux", "Le Fabuleux destin d'Amélie Poulain"),
                 3);
 
+       /* Question question27 = new Question("Quel film n'a pas été réalisé par Sergio Leone ?",
+                Arrays.asList("Pour une poignée de dollars", "L'homme qui valait 3 milliard", "Le Bon, la Brute et le Truand", "Il était une fois dans l'Ouest"),
+                1);
+*/
+        Question question28 = new Question("Qui a réalisé «Ghost Dog» ?",
+                Arrays.asList("Jim Jarmusch", "Jim Donovan", "Jim Cummings", "Jim Powers"),
+                0);
+
+        Question question29 = new Question("Qui a réalisé «Only Lovers Left Alive» ?",
+                Arrays.asList("Claire Denis", "Denis Villeneuve", "Jim Donovan", "Jim Jarmusch"),
+                3);
+
+        Question question30 = new Question("Lequel de ces films n'est pas réalisé par Quentin Tarantino ?",
+                Arrays.asList("Pulp Fiction", "Les 12 salopards", "Réservoir Dogs", "Les 8 salopards"),
+                1);
+
+        Question question31 = new Question("Lequel de ces films est réalisé par Quentin Tarantino ?",
+                Arrays.asList("12 hommes en colère", "Les 8 salopards", "Les 12 salopards", "Les 7 mercenaires"),
+                1);
+
+        Question question32 = new Question("Lequel de ces films n'est pas réalisé par Guy Ritchie ?",
+                Arrays.asList("Snatch : Tu braques ou tu raques", "Arnaques, Crimes et Botanique", "Hyper Tension", "Revolver"),
+                2);
+
+        Question question33 = new Question("Qui interprète le rôle de «Pierrot» dans «Pierrot le Fou» de Jean-Luc Godard ?",
+                Arrays.asList("Jean-Paul Belmondo", "Simon Belmont", "Jean-Paul Rouve", "Jean-Pierre Belmondo"),
+                0);
+
+        Question question34 = new Question("Qui interprète le rôle principal dans «Zatoichi» de Takeshi Kitano ?",
+                Arrays.asList("Takeshi Kitano", "Saburo Ishikura", "Guadalcanal Taka", "Takeshi Miike"),
+                0);
+
+        Question question35 = new Question("Quel acteur n'a jamais interprété «François Pignon», personnage récurrent du réalisateur Francis Veber ?",
+                Arrays.asList("Jacques Villeret", "Thierry Lhermitte", "Pierre Richard", "Daniel Auteuil"),
+                1);
+
+        Question question36 = new Question("Dans quel film ne retrouve-t-on pas le personnage de «François Perrin», personnage récurrent du réalisateur Francis Veber ?",
+                Arrays.asList("Le Grand Blond avec une chaussure noire", "Le Jouet", "Les Fugitifs", "La Chèvre"),
+                2);
+
+        Question question37 = new Question("Qui a réalisé «Suspiria» ?",
+                Arrays.asList("Mario Bava", "Dario Argento", "Wes Craven", "Lucio Fulci"),
+                1);
+
+        Question question38 = new Question("Qui a réalisé «Les évadés» ?",
+                Arrays.asList("Frank Darabont", "Alan Parker", "Don Siegel", "Ric Roman Waugh"),
+                0);
+
+        Question question39 = new Question("Qui a réalisé «Midnight Express» ?",
+                Arrays.asList("Don Siegel", "Alan Parker", "Ric Roman Waugh", "Frank Darabont"),
+                1);
+
+        Question question40 = new Question("Qui a réalisé «Les Affranchis» ?",
+                Arrays.asList("Francis Ford Coppola", "Brian De Palma", "Martin Scorsese", "Mike Newell"),
+                2);
+
+        Question question41 = new Question("Qui a réalisé «Le Parrain» ?",
+                Arrays.asList("Mike Newell", "Martin Scorsese", "Brian De Palma", "Francis Ford Coppola"),
+                3);
+
+        Question question42 = new Question("Qui a réalisé «Les Incorruptibles» ?",
+                Arrays.asList("Brian De Palma", "Mike Newell", "Francis Ford Coppola", "Martin Scorsese"),
+                0);
+
+        Question question43 = new Question("Quel film n'a pas été réalisé par Brad Bird ?",
+                Arrays.asList("Ratatouille", "Chicken Run", "Les Indestructibles", "Le Géant de fer"),
+                1);
+
 
         return new QuestionBank(Arrays.asList(question1,
                 question2,
@@ -325,7 +398,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 question23,
                 question24,
                 question25,
-                question26
+                question26,
+                //question27,
+                question28,
+                question29,
+                question30,
+                question31,
+                question32,
+                question33,
+                question34,
+                question35,
+                question36,
+                question37,
+                question38,
+                question39,
+                question40,
+                question41,
+                question42,
+                question43
         ));
     }
 
@@ -346,21 +436,33 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-
         System.out.println("GameActivity::onPause()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
+        countDownTimer.cancel();
         System.out.println("GameActivity::onStop()");
+        if(!good.equals(null)) {
+            good.release();
+        }
+        if(!wrong.equals(null)) {
+            wrong.release();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        countDownTimer.cancel();
 
+        if(!good.equals(null)) {
+            good.release();
+        }
+        if(!wrong.equals(null)) {
+            wrong.release();
+        }
         System.out.println("GameActivity::onDestroy()");
     }
 }

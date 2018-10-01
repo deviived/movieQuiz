@@ -2,6 +2,7 @@ package com.example.deviived.moviequiz.controller;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,12 +25,14 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences mPreferences;
     public static final String PREF_KEY_SCORE = "PREF_KEY_SCORE";
     public static final String PREF_KEY_FIRSTNAME = "PREF_KEY_FIRSTNAME";
-
+    MediaPlayer opening;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        opening = MediaPlayer.create(MainActivity.this, R.raw.quizz);
+
 
         setContentView(R.layout.activity_main);
         mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_txt);
@@ -94,6 +97,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("GameActivity::onStart()");
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!opening.equals(null)) {
+            opening.start();
+        }
+        System.out.println("GameActivity::onResume()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(!opening.equals(null)) {
+            opening.pause();
+        }
+        System.out.println("GameActivity::onPause()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(!opening.equals(null)) {
+            opening.pause();
+        }
+        System.out.println("GameActivity::onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(!opening.equals(null)) {
+            opening.release();
+        }
+        System.out.println("GameActivity::onDestroy()");
+    }
 
 }
