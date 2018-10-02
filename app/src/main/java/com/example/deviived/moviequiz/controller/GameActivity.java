@@ -2,6 +2,7 @@ package com.example.deviived.moviequiz.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
@@ -35,11 +37,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int mScore;
     private int mNumberOfQuestions;
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
+    public double increment = 0;
 
     CountDownTimer countDownTimer = null;
     public String timeS;
     MediaPlayer good;
     MediaPlayer wrong;
+    ProgressBar progressBar;
 
     private boolean mEnableTouchEvents;
 
@@ -52,7 +56,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mNumberOfQuestions = 10;
         mEnableTouchEvents = true;
 
-        mTimer = (TextView) findViewById(R.id.activity_timer_text);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryLight)));
+        progressBar.setProgressBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorTextSecondary)));
         mQuestion = (TextView) findViewById(R.id.activity_game_question_text);
         mAnswer1 = (Button) findViewById(R.id.activity_game_answer1_btn);
         mAnswer2 = (Button) findViewById(R.id.activity_game_answer2_btn);
@@ -80,7 +86,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         countDownTimer.cancel();
-        mTimer.setText("");
         int responseIndex = (int) v.getTag();
 
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
@@ -135,17 +140,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mAnswer4.setText(question.getChoiceList().get(3));
         mAnswer4.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
-        countDownTimer = new CountDownTimer(15000, 1000){
+        increment = 0;
+
+        countDownTimer = new CountDownTimer(16000, 20){
 
             @Override
             public void onTick(long millisUntilFinished) {
                 timeS = Long.toString(millisUntilFinished / 1000);
-                mTimer.setText(timeS);
+                increment+=20;
+                double total = 16000 - increment;
+                progressBar.setProgress((int) (total-20));
+                System.out.println("increment = "+increment+" ...millisUntilFinished = "+millisUntilFinished+" ....int TOTAL = "+total);
             }
 
             @Override
             public void onFinish() {
                 Toast.makeText(GameActivity.this ,"Time's up!", Toast.LENGTH_SHORT).show();
+                progressBar.setProgress(0);
                 wrong.start();
                 mEnableTouchEvents = false;
 
@@ -181,7 +192,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void endGame() {
         countDownTimer.cancel();
-        mTimer.setText("");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Well done!")
@@ -437,6 +447,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
         System.out.println("GameActivity::onPause()");
+        if(!good.equals(null)) {
+            good.release();
+        }
+        if(!wrong.equals(null)) {
+            wrong.release();
+        }
     }
 
     @Override

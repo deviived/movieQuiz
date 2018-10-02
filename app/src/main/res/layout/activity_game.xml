@@ -8,7 +8,7 @@
     android:background="@color/colorPrimaryDark"
     tools:context="com.example.deviived.moviequiz.controller.GameActivity">
 
-    <TextView
+ <!--   <TextView
         android:id="@+id/activity_timer_text"
         android:layout_width="wrap_content"
         android:layout_weight="0.4"
@@ -21,7 +21,7 @@
         android:textStyle="bold"
         android:gravity="center"
         android:text="10"></TextView>
-
+-->
     <TextView
         android:id="@+id/activity_game_question_text"
         android:layout_width="match_parent"
@@ -37,11 +37,22 @@
         android:textAllCaps="true"
         android:text="Question ?"></TextView>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_margin="5dp"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:progressBackgroundTint="@color/colorPrimaryLight"
+        android:max="16000"
+        />
+
     <Button
         android:id="@+id/activity_game_answer1_btn"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:textColor="@android:color/background_light"
         android:background="@color/colorPrimary"
@@ -53,7 +64,7 @@
         android:id="@+id/activity_game_answer2_btn"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="15dp"
         android:layout_weight="1"
         android:textColor="@android:color/background_light"
         android:background="@color/colorPrimary"
@@ -65,7 +76,7 @@
         android:id="@+id/activity_game_answer3_btn"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="15dp"
         android:layout_weight="1"
         android:textColor="@android:color/background_light"
         android:background="@color/colorPrimary"
@@ -77,7 +88,7 @@
         android:id="@+id/activity_game_answer4_btn"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="20dp"
         android:layout_weight="1"
         android:textColor="@android:color/background_light"
         android:background="@color/colorPrimary"
