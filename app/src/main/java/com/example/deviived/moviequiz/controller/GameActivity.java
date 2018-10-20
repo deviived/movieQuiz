@@ -2,6 +2,7 @@ package com.example.deviived.moviequiz.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
@@ -23,9 +24,10 @@ import com.example.deviived.moviequiz.model.QuestionBank;
 import java.util.Arrays;
 import java.util.List;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class GameActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private TextView mTimer;
     private TextView mQuestion;
     private Button mAnswer1;
     private Button mAnswer2;
@@ -37,6 +39,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int mScore;
     private int mNumberOfQuestions;
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
+    public static final String BUNDLE_STATE_SCORE = "currentScore";
+    public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
     public double increment = 0;
 
     CountDownTimer countDownTimer = null;
@@ -51,14 +55,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        GameActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mQuestionBank = this.generateQuestions();
-        mNumberOfQuestions = 10;
+
+        if (savedInstanceState != null) {
+            mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
+            mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
+        } else {
+            mScore = 0;
+            mNumberOfQuestions = 3;
+        }
+
         mEnableTouchEvents = true;
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryLight)));
         progressBar.setProgressBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorTextSecondary)));
+        GifImageView gifImageView = (GifImageView) findViewById(R.id.activity_gif_perso);
         mQuestion = (TextView) findViewById(R.id.activity_game_question_text);
         mAnswer1 = (Button) findViewById(R.id.activity_game_answer1_btn);
         mAnswer2 = (Button) findViewById(R.id.activity_game_answer2_btn);
@@ -188,6 +202,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         return mEnableTouchEvents && super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(BUNDLE_STATE_SCORE, mScore);
+        outState.putInt(BUNDLE_STATE_QUESTION, mNumberOfQuestions);
+
+        super.onSaveInstanceState(outState);
     }
 
     private void endGame() {
@@ -439,7 +462,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-
         System.out.println("GameActivity::onResume()");
     }
 
